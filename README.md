@@ -19,27 +19,34 @@ gestão de escolas e organizações de artes marciais, iniciando pelo
 -   Multi-tenant
 -   APIs para integrações
 
-## Arquitetura
+## Arquitetura e stack oficial
 
--   Clean Architecture
--   Domain-Driven Design (DDD)
--   SOLID
--   ASP.NET Core
--   PostgreSQL
--   Entity Framework Core
+-   Clean Architecture, Domain-Driven Design (DDD) e SOLID como diretrizes
+-   Python 3.13+
+-   FastAPI e Uvicorn para a API
+-   PostgreSQL como banco de dados relacional
+-   SQLAlchemy como ORM e Alembic para migracoes
+-   Pydantic Settings para configuracao por ambiente
+-   `uv`, `pyproject.toml` e `uv.lock` como fonte de verdade das dependencias
 
 ## Estrutura do Projeto
 
-``` text
-docs/
-src/
-tests/
-database/
-deployment/
-docker/
-scripts/
-assets/
+```text
+backend/
+  app/
+    api/
+    core/
+    database/
+  alembic/
+docker-compose.yml
 ```
+
+## Execucao local
+
+1. Copie `backend/.env.example` para `backend/.env` e substitua as credenciais de exemplo.
+2. Na raiz do projeto, suba o PostgreSQL com `docker compose --env-file backend/.env up -d`.
+3. No diretorio `backend`, sincronize o ambiente com `uv sync` e inicie a API com
+   `uv run uvicorn app.main:app --reload`.
 
 ## Roadmap
 

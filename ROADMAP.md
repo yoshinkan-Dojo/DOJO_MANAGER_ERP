@@ -19,9 +19,16 @@ organizações de artes marciais.
 ### v0.9.x
 
 -   Modelagem do Banco de Dados
--   Scripts PostgreSQL
--   Solução .NET
--   Autenticação e Segurança
+-   Migracoes Alembic e PostgreSQL
+-   Fundacao FastAPI + SQLAlchemy
+-   Autenticacao e Seguranca
+
+### Stack de fundacao
+
+-   FastAPI e Uvicorn
+-   PostgreSQL, SQLAlchemy e Alembic
+-   Configuracao por ambiente com Pydantic Settings
+-   `uv`, `pyproject.toml` e `uv.lock` para dependencias
 
 ### v1.0.0
 

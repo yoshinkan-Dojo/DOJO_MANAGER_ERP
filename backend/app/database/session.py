@@ -9,7 +9,7 @@ settings = get_settings()
 
 engine = create_engine(
     settings.DATABASE_URL,
-    echo=True
+    echo=settings.SQLALCHEMY_ECHO,
 )
 
 
@@ -21,11 +21,8 @@ SessionLocal = sessionmaker(
 
 
 def get_db():
-
     db = SessionLocal()
-
     try:
         yield db
-
     finally:
         db.close()
