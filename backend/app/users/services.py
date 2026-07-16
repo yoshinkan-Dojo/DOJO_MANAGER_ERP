@@ -17,6 +17,7 @@ class UserService:
 
     def create_user(self, payload: UserCreate) -> User:
         email = payload.email.lower()
+
         if self.repository.get_by_email(email):
             raise UserAlreadyExistsError("Email already registered")
 
@@ -28,6 +29,7 @@ class UserService:
             is_active=payload.is_active,
             is_superuser=payload.is_superuser,
         )
+
         return self.repository.save(user)
 
     def get_user(self, user_id: uuid.UUID) -> User | None:
@@ -38,17 +40,25 @@ class UserService:
 
     def update_user(self, user: User, payload: UserUpdate) -> User:
         changes = payload.model_dump(exclude_unset=True)
+
         if "email" in changes:
             email = changes["email"].lower()
             existing = self.repository.get_by_email(email)
+
             if existing and existing.id != user.id:
                 raise UserAlreadyExistsError("Email already registered")
+
             user.email = email
             del changes["email"]
-        if password := changes.pop("password", None):
+
+        password = changes.pop("password", None)
+
+        if password:
             user.hashed_password = hash_password(password)
+
         for field, value in changes.items():
             setattr(user, field, value)
+
         return self.repository.save(user)
 
     def delete_user(self, user: User) -> None:
@@ -56,7 +66,14 @@ class UserService:
 
     def authenticate(self, email: str, password: str) -> User | None:
         user = self.repository.get_by_email(email.lower())
-        if not user or not user.is_active or not verify_password(password, user.hashed_password):
+
+        if (
+            user is None
+            or not user.is_active
+            or not verify_password(password, user.hashed_password)
+        ):
             return None
+
         user.last_login = datetime.now(UTC)
+
         return self.repository.save(user)

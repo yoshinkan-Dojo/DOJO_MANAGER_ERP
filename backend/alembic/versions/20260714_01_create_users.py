@@ -25,11 +25,11 @@ user_role = sa.Enum(
     "ALUNO",
     "RESPONSAVEL",
     name="user_role",
+    create_type=False,
 )
 
 
 def upgrade() -> None:
-    user_role.create(op.get_bind(), checkfirst=True)
     op.create_table(
         "users",
         sa.Column("id", sa.Uuid(), nullable=False),
@@ -51,4 +51,4 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_table("users")
-    user_role.drop(op.get_bind(), checkfirst=True)
+    
